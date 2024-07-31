@@ -1,0 +1,41 @@
+body {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.144), rgba(255, 255, 255, 0.139)), 
+    url("../../../public/pexels-karolina-grabowska-5632403.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  margin: 0;
+}
+  #loginPage {
+    display: flex;
+    justify-content: center; /* ממרכז את התיבה באופן אופקי */
+    align-items: center; /* ממרכז את התיבה באופן אנכי */
+    height: 100vh; /* גובה מלא של העמוד */
+  }
+  
+  #loginFormContainer {
+    display: flex;
+    flex-direction: column; /* מסדר את האלמנטים בתוך הקונטיינר בצורת עמודה */
+    align-items: center; /* ממרכז את התיבה באופן אנכי */
+    width: 400px;
+    margin-top: 70px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-left: 200px;
+    text-align: right;
+    direction: rtl;
+    background-color: rgba(255, 255, 255, 0.703);
+  }
+  
+  .inputField .MuiInputLabel-root {
+      direction: rtl;
+    }
+
+ .MuiButtonBase-root .MuiButton-root .MuiButton-contained .MuiButton-containedPrimary .MuiButton-sizeMedium .MuiButton-containedSizeMedium .MuiButton-fullWidth .MuiButton-root .MuiButton-contained .MuiButton-containedPrimary .MuiButton-sizeMedium .MuiButton-containedSizeMedium .MuiButton-fullWidth .css-1fu7jd5-MuiButtonBase-root-MuiButton-root
+ {
+    background-color: red;
+ } 
