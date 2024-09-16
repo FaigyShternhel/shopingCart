@@ -6,10 +6,14 @@ import {
   Select,
   MenuItem,
   Button,
-  Grid
+  Grid,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { addItemToCart, fetchCategories, fetchItems } from "../../Redux/cart/cartActions";
+import {
+  addItemToCart,
+  fetchCategories,
+  fetchItems,
+} from "../../Redux/cart/cartActions";
 import { useState, useEffect } from "react";
 import { Category, CartItem } from "../../Redux/cart/cartTypes";
 
@@ -27,18 +31,21 @@ const StyledButton = styled(Button)(({ theme }) => ({
   margin: theme.spacing(2, 0),
   backgroundColor: "#4caf50",
   color: "#fff",
-  '&:hover': {
+  "&:hover": {
     backgroundColor: "#388e3c",
   },
 }));
 
 const HomePage = () => {
   const [itemName, setItemName] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<Category | undefined>(undefined); // עדכון לסוג הנכון של הקטגוריה
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state: any) => state.cart.items);
   const categories = useAppSelector((state: any) => state.cart.categories);
-  const totalItems = cartItems.reduce((total: number, item: CartItem) => total + item.quantity, 0);
+  const totalItems = cartItems.reduce(
+    (total: number, item: CartItem) => total + item.quantity,
+    0
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -47,27 +54,39 @@ const HomePage = () => {
 
   const handleAddItem = () => {
     if (itemName && category) {
-      const existingItem = cartItems.find((item: CartItem) => item.name === itemName && item.category === category);
-      
+      const existingItem = cartItems.find(
+        (item: CartItem) =>
+          item.name === itemName && item.category.name === category.name
+      );
+
       if (existingItem) {
-        dispatch(addItemToCart({ ...existingItem, quantity: existingItem.quantity + 1 }));
+        dispatch(
+          addItemToCart({ ...existingItem, quantity: existingItem.quantity + 1 })
+        );
       } else {
-        dispatch(addItemToCart({ name: itemName, category, quantity: 1 }));
+        dispatch(
+          addItemToCart({
+            name: itemName,
+            category, // כאן הקטגוריה היא אובייקט
+            quantity: 1,
+          })
+        );
       }
-      
+
       setItemName("");
-      setCategory("");
+      setCategory(undefined); // כדי לאפס את הקטגוריה אחרי הוספת המוצר
     }
   };
 
   const groupItemsByCategory = () => {
     const groupedItems: { [key: string]: CartItem[] } = {};
-    
+
     cartItems.forEach((item: CartItem) => {
-      if (!groupedItems[item.category]) {
-        groupedItems[item.category] = [];
+      const categoryName = item.category.name; // גישה לשם מתוך האובייקט
+      if (!groupedItems[categoryName]) {
+        groupedItems[categoryName] = [];
       }
-      groupedItems[item.category].push(item);
+      groupedItems[categoryName].push(item);
     });
 
     return groupedItems;
@@ -92,8 +111,12 @@ const HomePage = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={category ? category.name : ""} // מציג את שם הקטגוריה הנוכחית
+            onChange={(e) =>
+              setCategory(
+                categories.find((cat: Category) => cat.name === e.target.value)
+              )
+            } // עדכון לקטגוריה הנכונה
             displayEmpty
             fullWidth
           >
@@ -101,9 +124,12 @@ const HomePage = () => {
               קטגוריה
             </MenuItem>
             {categories.map((cat: Category) => (
-              <MenuItem key={cat.id} value={cat.name}>{cat.name}</MenuItem>
+              <MenuItem key={cat.id} value={cat.name}>
+                {cat.name}
+              </MenuItem>
             ))}
           </Select>
+
         </Grid>
         <Grid item xs={12}>
           <StyledButton variant="contained" onClick={handleAddItem}>
@@ -115,13 +141,20 @@ const HomePage = () => {
         סה"כ מוצרים בסל: {totalItems}
       </Typography>
       <Box mt={4} width="100%">
-        <Typography variant="h6" gutterBottom>מוצרים בסל:</Typography>
-        {Object.keys(groupedItems).map((category: string) => (
-          <Box key={category} mb={2}>
+        <Typography variant="h6" gutterBottom>
+          מוצרים בסל:
+        </Typography>
+        {Object.keys(groupedItems).map((categoryName: string) => (
+          <Box key={categoryName} mb={2}>
             <Typography variant="h6" gutterBottom>
-              {category} ({groupedItems[category].reduce((total: number, item: CartItem) => total + item.quantity, 0)})
+              {categoryName} (
+              {groupedItems[categoryName].reduce(
+                (total: number, item: CartItem) => total + item.quantity,
+                0
+              )}
+              )
             </Typography>
-            {groupedItems[category].map((item: CartItem, index: number) => (
+            {groupedItems[categoryName].map((item: CartItem, index: number) => (
               <Box key={index} mb={1}>
                 <Typography variant="body1">
                   {item.name} ({item.quantity})

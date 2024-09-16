@@ -16,11 +16,11 @@ export const addItem = async (req: Request, res: Response) => {
 
     let item;
 
-    if (existingItem && existingItem.category.name === category) {
+    if (existingItem && existingItem.category.name === category.name) {
       existingItem.quantity += quantity;
       item = await itemRepository.save(existingItem);
     } else {
-      const categoryEntity = await categoryRepository.findOne({ where: { name: category } });
+      const categoryEntity = await categoryRepository.findOne({ where: { name: category.name } });
 
       if (!categoryEntity) {
         return res.status(404).send({ message: "Category not found" });
@@ -68,12 +68,12 @@ export const checkout = async (req: Request, res: Response) => {
         const { name, category, quantity } = cartItem;
         let existingItem = await itemRepository.findOne({ where: { name }, relations: ["category"] });
   
-        if (existingItem && existingItem.category.name === category) {
+        if (existingItem && existingItem.category.name === category.name) {
           existingItem.quantity += quantity;
           await itemRepository.save(existingItem);
         } else {
           const categoryRepository = AppDataSource.getRepository(Category);
-          const categoryEntity = await categoryRepository.findOne({ where: { name: category } });
+          const categoryEntity = await categoryRepository.findOne({ where: { name: category.name } });
   
           if (categoryEntity) {
             const newItem = itemRepository.create({

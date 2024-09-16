@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TextField, Button, Link, Typography, Box } from "@mui/material";
-import { logIn, signIn } from "../../Redux/user/userActions"; // השלם את הנתיב לפי המיקום המתאים
-import styled from "@emotion/styled";
+import { signIn } from "../../Redux/user/userActions"; // השלם את הנתיב לפי המיקום המתאים
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import "./Signup.css";
 import { User } from "../../types";
@@ -20,7 +19,6 @@ const SignupForm: React.FC = () => {
     address: "",
   });
   const currentUser = useAppSelector((state: any) => state.user.currentUser);
-  const [err, setErr] = useState(false);
   const navigate = useNavigate()
 
   const handleLogin = (e: React.FormEvent) => {

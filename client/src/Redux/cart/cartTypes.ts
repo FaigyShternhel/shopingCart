@@ -8,7 +8,7 @@ export enum CartActionTypes {
   
   export interface CartItem {
     name: string;
-    category: string;
+    category: Category;
     quantity: number;
   }
   
