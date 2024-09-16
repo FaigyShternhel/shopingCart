@@ -38,7 +38,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const HomePage = () => {
   const [itemName, setItemName] = useState("");
-  const [category, setCategory] = useState<Category | undefined>(undefined); // עדכון לסוג הנכון של הקטגוריה
+  const [category, setCategory] = useState<Category | undefined>(undefined); 
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state: any) => state.cart.items);
   const categories = useAppSelector((state: any) => state.cart.categories);
@@ -67,14 +67,14 @@ const HomePage = () => {
         dispatch(
           addItemToCart({
             name: itemName,
-            category, // כאן הקטגוריה היא אובייקט
+            category, 
             quantity: 1,
           })
         );
       }
 
       setItemName("");
-      setCategory(undefined); // כדי לאפס את הקטגוריה אחרי הוספת המוצר
+      setCategory(undefined);
     }
   };
 
@@ -82,7 +82,7 @@ const HomePage = () => {
     const groupedItems: { [key: string]: CartItem[] } = {};
 
     cartItems.forEach((item: CartItem) => {
-      const categoryName = item.category.name; // גישה לשם מתוך האובייקט
+      const categoryName = item.category.name;
       if (!groupedItems[categoryName]) {
         groupedItems[categoryName] = [];
       }
@@ -111,12 +111,12 @@ const HomePage = () => {
         </Grid>
         <Grid item xs={12} sm={6}>
           <Select
-            value={category ? category.name : ""} // מציג את שם הקטגוריה הנוכחית
+            value={category ? category.name : ""} 
             onChange={(e) =>
               setCategory(
                 categories.find((cat: Category) => cat.name === e.target.value)
               )
-            } // עדכון לקטגוריה הנכונה
+            } 
             displayEmpty
             fullWidth
           >
